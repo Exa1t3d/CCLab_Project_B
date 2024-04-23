@@ -89,7 +89,53 @@ function displayNextView() {
   textSize(32);
   textAlign(CENTER, CENTER);
   fill(255);
-  text("Final View", width/2, height/2);
+  
+  // Parameters for the stick figure
+  let torsoLength = 100; // Length of the torso
+  let upperLegLength = 60; // Length of the upper part of the leg
+  let lowerLegLength = 40; // Length of the lower part of the leg
+  let armLength = 50; // Length of the arm
+  let headRadius = 25; // Radius of the head
+  let angle = radians(115); // Angle of torso off the ground
+
+  // Calculate torso endpoint
+  let torsoEndX = 400 + cos(angle) * torsoLength;
+  let torsoEndY = 300 + sin(angle) * torsoLength;
+  
+  // Push the current drawing style settings
+  push();
+  // Stick figure with stroke
+  stroke(255);
+  // Torso
+  line(400, 300, torsoEndX, torsoEndY); // Body
+  // Left arm
+  line(400, 300, 400 - cos(angle) * armLength, 300 - sin(angle) * armLength); // Left arm
+  // Right arm
+  line(400, 300, 400 + cos(angle) * armLength, 300 - sin(angle) * armLength); // Right arm
+  // Left leg (upper part)
+  let leftKneeX = torsoEndX - cos(angle) * upperLegLength;
+  let leftKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, leftKneeX, leftKneeY); // Left upper leg
+  // Left leg (lower part)
+  line(leftKneeX, leftKneeY, leftKneeX - 20, leftKneeY + lowerLegLength); // Left lower leg
+  // Right leg (upper part)
+  let rightKneeX = torsoEndX + cos(angle) * upperLegLength;
+  let rightKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, rightKneeX, rightKneeY); // Right upper leg
+  // Right leg (lower part)
+  line(rightKneeX, rightKneeY, rightKneeX + 20, rightKneeY + lowerLegLength); // Right lower leg
+  // Head
+  circle(400, 300, headRadius * 2); // Head
+  // Pop the drawing style settings
+  pop();
+  
+  // Draw cartoon stars above the head separately to ensure no connection lines to the head
+  push(); // Isolate the fill to not affect other parts
+  fill(255, 255, 0); // Yellow color
+  ellipse(380, 260, 20, 20);
+  ellipse(420, 250, 30, 30);
+  ellipse(460, 270, 25, 25);
+  pop();
 }
 
 // Function to check if the mouse was clicked on a particular treasure chest
@@ -147,4 +193,3 @@ function drawWaveAroundStickFigure(direction) {
     ellipse(x, y, ballSize, ballHeight); // Adjusted ballHeight to create stretching effect
   }
 }
-
