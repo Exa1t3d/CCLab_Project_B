@@ -1,7 +1,7 @@
+
+
 // Variables to control the state of the animations
 let isLustAnimating = false;
-let isCuriosityAnimating = false;
-let isGreedAnimating = false;
 let animationStartedAt = 0;
 let animationFinishedAt = 0;
 let isAnimationFinished = false;
@@ -23,7 +23,7 @@ let numBalls = 16; // Number of balls in the wave
 let ballSize = 30; // Diameter of each ball
 let ballX = []; // X position of each ball
 let ballY = []; // Y position of each ball
-let ballSpeed = 2; // Speed at which the balls move vertically
+let ballSpeed = 1; // Speed at which the balls move vertically
 let ballColors = []; // Color of each ball
 
 function setup() {
@@ -47,6 +47,7 @@ function draw() {
   if (isAnimationFinished) {
     displayNextView();
   } else if(isAnimating) {
+
      drawStickFigure();
   } else  {
     drawStickFigure();
@@ -56,10 +57,6 @@ function draw() {
   // Trigger animations based on state
   if (isLustAnimating) {
     animateLust();
-  } else if (isCuriosityAnimating) {
-    animateCuriosity();
-  } else if (isGreedAnimating) {
-    animateGreed();
   }
 }
 
@@ -109,9 +106,13 @@ function displayNextView() {
   // Torso
   line(400, 300, torsoEndX, torsoEndY); // Body
   // Left arm
-  line(400, 300, 400 - cos(angle) * armLength, 300 - sin(angle) * armLength); // Left arm
+  let leftArmEndX = 325 - cos(angle) * armLength;
+  let leftArmEndY = 325 - sin(angle) * armLength;
+  line(375, 350, leftArmEndX, leftArmEndY); // Left arm
   // Right arm
-  line(400, 300, 400 + cos(angle) * armLength, 300 - sin(angle) * armLength); // Right arm
+  let rightArmEndX = 325 + cos(angle) * armLength;
+  let rightArmEndY = 325 - sin(angle) * armLength;
+  line(375, 350, rightArmEndX, rightArmEndY); // Right arm
   // Left leg (upper part)
   let leftKneeX = torsoEndX - cos(angle) * upperLegLength;
   let leftKneeY = torsoEndY + sin(angle) * upperLegLength;
