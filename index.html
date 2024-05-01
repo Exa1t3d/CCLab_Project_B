@@ -1,123 +1,54 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Curiosity</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1em;
-        }
-
-        /* title */
-        #title-wrapper {
-            text-align: center;
-        }
-
-        .headline {
-            font-size: 4em;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            font-weight: 600;
-        }
-
-        /* main content */
-        #main-wrapper {
-            width: 800px;
-            position: relative;
-            margin: auto;
-        }
-
-        .red {
-            color: coral;
-        }
-
-        .green {
-            color: aquamarine;
-        }
-
-        .yellow {
-            color: gold;
-        }
-
-        .two-columns {
-            display: flex;
-        }
-
-        .left,
-        .right {
-            width: 50%;
-        }
-
         .box {
-            background-color: #180026; /* Very dark purple */
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        #footer {
             text-align: center;
-            font-size: 0.7em;
-            margin-top: 50px;
-            padding-bottom: 40px;
+            margin-bottom: 20px; /* Add margin between boxes */
         }
-
-        /* Sketch placeholder */
-        #p5container img {
-            width: 100%;
-            display: block;
-            margin: auto;
-        }
-
-        /* home button */
-        #home a {
-            position: fixed;
-            right: 50px;
-            top: 10px;
-            padding: 10px 20px;
-            color: dimgrey;
-            border: solid dimgrey 0.5px;
-            font-size: 0.7em;
-            text-decoration: none;
-        }
-
-        #home a:hover {
-            background-color: coral;
-            color: black;
+        .quote-box {
+            background-color: #6648a5; /* Change background color for the quote box to a complementary color */
+            color: #fff; /* Change text color for the quote box */
+            padding: 20px;
+            border-radius: 10px; /* Add rounded corners */
+            text-align: center; /* Center align the text */
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.1/p5.js"></script>
 </head>
-
 <body>
+    <div id="p5container">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.1/p5.js"></script>
+    </div>
     <div id="title-wrapper">
         <h1 class="headline red">Curiosity</h1>
-        <script src="sketch.js"></script> <!-- Move the script here -->
     </div>
     <div id="main-wrapper">
-        <div id="p5container">
-            <!-- Your p5.js sketch goes here -->
+        <div class="box" style="background-color: #180026;">
+            <h3 class="yellow">Created By</h3>
+            <p>Britt Burney, 05/01/2024</p>
         </div>
-        <img src="" alt="">
-        <div class="two-columns">
-            <div class="left">
-                <div class="box">
-                    <h3 class="yellow">Created By :</h3>
-                    <p>Britt Burney, 04/23/2024</p>
-                </div>
-                <div class="box">
-                    <h3 class="green">Description: </h3>
-                    <p>I created Curiosity to represent the insatiable desire of humanity to look beyond what lies before us and venture out into the unknown. The portentous treasure chest presented before our character captivating our protagonist, beckoning him to open it. After gazing into the mysterious treasure trove, he is sent throughout the space and time itself until he is transposed into a new realm. He now lies as a stranger amidst unfamiliar landscapes, his senses momentarily confounded by the tumultuous whirlwind of temporal displacement.</p>
-                </div>
-            </div>
+        <div class="box" style="background-color: #281147;">
+            <h3 class="green">Description</h3>
+            <p>Curiosity is what defines humanity. Our insatiable desire to look beyond what lies before us and venture out into the unknown has fascinated great thinkers since time began, and although it is unmistakable that it has led to our species' dominance, many have called into question if it will bring about our demise.</p>
+        </div>
+        <div class="box" style="background-color: #392162;">
+            <h3 class="box-title">Story of Curiosity</h3>
+            <p>The portentous treasure chest presented before our protagonist beckons him to venture into the unknown across space and time, unfolding into realms never before seen by mankind.</p>
+        </div>
+        <!-- Image -->
+        <img src="img1.jpg" alt="Description Image" class="box">
+        <!-- Quote Box -->
+        <div class="quote-box">
+            <h3 class="box-title" style="text-align: center;">Quote about Curiosity</h3>
+            <p style="text-align: center;">"Remember to look up at the stars and not down at your feet." - Stephen Hawking</p>
         </div>
     </div>
-    <div id="home"><a href="https://www.cclab.work/atlas">Back to the ATLAS</a></div>
-    <div id="footer" class="yellow">
-        <p>A CCLab project made by Britt Burney, Spring '24</p>
+    <div id="footer">
+        <p>A CCLab project made by Britt Burney, Spring '24  <a href="sketch_fullscreen.html">View Fullscreen Sketch</a></p>
     </div>
+    <script src="sketch.js"></script>
 </body>
-
 </html>
