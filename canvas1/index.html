@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+
+<body>
+  <!-- the following div will contain the p5 canvas -->
+  <div id="canvasContainer"></div>
+
+  <script>
+let angle = 0;
+let petalCount = 0;
+let timer1 = 0; // Timer for drawPetalsIn()
+// let timer2 = 0; // Timer for drawPetalsOut()
+let petalIntervalIn = 0.033; // in seconds
+// let petalIntervalOut = 0.01; // in seconds
+let colors;
+let colors2;
+let angleClockwise = 0;
+let angleCounterclockwise = 0;
+let petalCountClockwise = 0;
+let petalCountCounterclockwise = 0;
+let bgDrawn = false; // Flag to check if background has been drawn
+
+function setup() {
+  createCanvas(400, 1200);
+  generateColors();
+  // generateColors2();
+}
+
+function generateColors() {
+  colors = [
+    color(255, 0, 0),       // Red
+    color(255, 50, 50),     // Lighter red
+    color(255, 100, 100),   // Even lighter red
+    color(255, 150, 150),   // Very light red
+    color(255, 125, 0),     // Orange
+    color(255, 175, 50),    // Lighter orange
+    color(255, 200, 100),   // Even lighter orange
+    color(255, 225, 150),   // Very light orange
+    color(255, 255, 0),     // Yellow
+    color(255, 255, 50),    // Lighter yellow
+    color(255, 255, 100),   // Even lighter yellow
+    color(255, 255, 150),   // Very light yellow
+    color(0, 255, 0),       // Green
+    color(50, 255, 50),     // Lighter green
+    color(100, 255, 100),   // Even lighter green
+    color(150, 255, 150),   // Very light green
+    color(0, 255, 255),     // Cyan
+    color(50, 255, 255),    // Lighter cyan
+    color(100, 255, 255),   // Even lighter cyan
+    color(150, 255, 255),   // Very light cyan
+    color(0, 0, 255),       // Blue
+    color(50, 50, 255),     // Lighter blue
+    color(100, 100, 255),   // Even lighter blue
+    color(150, 150, 255),   // Very light blue
+    color(128, 0, 128),     // Purple
+    color(150, 50, 150),    // Lighter purple
+    color(175, 100, 175),   // Even lighter purple
+    color(200, 150, 200)    // Very light purple
+  ];
+}
+
+function draw() {
+  if (!bgDrawn) {
+    drawBG();
+    bgDrawn = true;
+  }
+  // drawPetalsOut();
+  drawPetalsIn();
+  drawFace();
+  drawEyes();
+  drawMouth();
+}
+function draw() {
+  background(255, 0); // Set background to transparent
+
+  if (!bgDrawn) {
+    drawBG();
+    bgDrawn = true;
+  }
+  // drawPetalsOut();
+  drawPetalsIn();
+  drawFace();
+  drawEyes();
+  drawMouth();
+}
+
+// Function to draw background
+function drawBG() {
+  background(255, 0);
+}
+
+// Draws background circle for face
+function drawFace() {
+  fill('yellow');
+  ellipse(width / 2, height / 2, 175, 175);
+}
+
+// Draws eyes
+function drawEyes() {
+  // Draw outline for eyes
+  fill('black');
+  ellipse(width / 2 - 34, height / 2 - 20, 35, 40);
+  ellipse(width / 2 + 34, height / 2 - 20, 35, 40);
+
+  // Draw pupils
+  fill('white');
+  noStroke();
+  ellipse(width / 2 - 34, height / 2 - 27, 24, 24);
+  ellipse(width / 2 + 34, height / 2 - 27, 24, 24);
+}
+
+// Draws mouth
+function drawMouth() {
+  noFill();
+  stroke('black');
+  strokeWeight(4);
+  arc(width / 2, height / 2 + 30, 100, 60, 0, PI);
+  
+  // Add a line to close off the top of the arc
+  line(width / 2 - 50, height / 2 + 30, width / 2 + 50, height / 2 + 30);
+  
+  // Fill the interior of the shape with reddish-pink color
+  fill(255, 192, 203); // reddish-pink color
+  
+  // Draw the filled area with its own stroke settings
+  push();
+  noStroke(); // No stroke for the filled area
+  beginShape();
+  vertex(width / 2 - 50, height / 2 + 30); // Start from the left end of the line
+  arc(width / 2, height / 2 + 30, 100, 60, 0, PI); // Draw the arc
+  vertex(width / 2 + 50, height / 2 + 30); // End at the right end of the line
+  endShape(CLOSE); // Close the shape
+  pop(); // Restore stroke settings after drawing the filled area
+}
+
+// Draws petals around the circumference of the face
+function drawPetalsIn() {
+  if (millis() - timer1 > petalIntervalIn * 1000) {
+    timer1 = millis();
+
+    // Draw one petal on the clockwise ring (inner ring)
+    let colorIndexClockwise = int(map(petalCountClockwise, 0, 30, 0, colors.length));
+    let xClockwise = width / 2 + cos(radians(angleClockwise)) * 90;
+    let yClockwise = height / 2 + sin(radians(angleClockwise)) * 90;
+    fill(colors[colorIndexClockwise]);
+    ellipse(xClockwise, yClockwise, 40, 60);
+    angleClockwise += 360 / 20; // 20 petals for the inner circumference
+    petalCountClockwise++;
+
+    // Reset petal counts if they reach the maximum
+    if (petalCountClockwise >= 30) {
+      petalCountClockwise = 0;
+    }
+  }
+}
+  </script>
+</body>
+</html>

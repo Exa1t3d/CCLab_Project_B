@@ -1,0 +1,8 @@
+.canvas1Frame{
+    width: 500px;
+    height: 800px;
+}
+
+iframe{
+    display: block;
+}
