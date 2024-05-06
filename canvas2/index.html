@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+
+<body>
+  <!-- the following div will contain the p5 canvas -->
+  <div id="canvasContainer"></div>
+
+  <script>
+// Variables to control the state of the animations
+let isLustAnimating = false;
+let animationStartedAt = 0;
+let animationFinishedAt = 0;
+let isAnimationFinished = false;
+// Variable to control the state of the final psychedelic environment
+let isAnimating = false; // Variable to control what elements are displayed on the canvas
+
+// Variables for sine wave animation
+let xspacing = 16; // Distance between each horizontal location
+let w; // Width of entire wave
+let h; // Height of entire wave
+let theta = 0.0; // Start angle at 0
+let amplitude = 35.0; // Height of wave
+let period = 500.0; // How many pixels before the wave repeats
+let dx; // Value for incrementing x
+let xvalues; // Using an array to store horizontal height values for the wave
+
+// Variables for ball wave animation
+let numBalls = 16; // Number of balls in the wave
+let ballSize = 30; // Diameter of each ball
+let ballX = []; // X position of each ball
+let ballY = []; // Y position of each ball
+let ballSpeed = 1; // Speed at which the balls move vertically
+let ballColors = []; // Color of each ball
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  w = width + 16;
+  h = height + 16;
+  dx = (PI * 8 / period) * xspacing;
+  xvalues = new Array(floor(w / xspacing));
+
+  // Initialize ball positions and colors
+  for (let i = 0; i < numBalls; i++) {
+    ballX.push(i * (width / numBalls));
+    ballY.push(height / 2);
+    ballColors.push(color(random(255), random(255), random(255)));
+  }
+}
+
+function draw() {
+  background(0);
+  // Logic to display the transition view once the animation is done
+  if (isAnimationFinished) {
+    displayNextView();
+  } else if(isAnimating) {
+     drawStickFigure();
+  } else  {
+    drawStickFigure();
+    drawTreasureChests();
+  }
+
+  // Trigger animations based on state
+  if (isLustAnimating) {
+    animateLust();
+  }
+}
+
+function drawStickFigure() {
+  // Set stroke color to white
+  stroke(255);
+  line(400, 300, 400, 400); // Body
+  line(400, 350, 370, 330); // Left arm
+  line(400, 350, 430, 330); // Right arm
+  line(400, 400, 380, 450); // Left leg
+  line(400, 400, 420, 450); // Right leg
+  circle(400, 275, 50); // Head
+}
+
+
+function drawTreasureChests() {
+  // Enhanced treasure chests visuals
+  // Chest for Lust
+  fill('red');
+  ellipse(150, 140, 120, 80); // Lust Chest base
+  fill(255, 192, 203); // Light pink
+  arc(150, 140, 120, 80, PI, 0, CHORD); // Lust Chest lid
+}
+
+// Display the next view after animations finish
+function displayNextView() {
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  
+  // Parameters for the stick figure
+  let torsoLength = 100; // Length of the torso
+  let upperLegLength = 60; // Length of the upper part of the leg
+  let lowerLegLength = 40; // Length of the lower part of the leg
+  let armLength = 50; // Length of the arm
+  let headRadius = 25; // Radius of the head
+  let angle = radians(115); // Angle of torso off the ground
+
+  // Calculate torso endpoint
+  let torsoEndX = 400 + cos(angle) * torsoLength;
+  let torsoEndY = 300 + sin(angle) * torsoLength;
+  
+  // Push the current drawing style settings
+  push();
+  // Stick figure with stroke
+  stroke(255);
+  // Torso
+  line(400, 300, torsoEndX, torsoEndY); // Body
+  // Left arm
+  let leftArmEndX = 325 - cos(angle) * armLength;
+  let leftArmEndY = 325 - sin(angle) * armLength;
+  line(375, 350, leftArmEndX, leftArmEndY); // Left arm
+  // Right arm
+  let rightArmEndX = 325 + cos(angle) * armLength;
+  let rightArmEndY = 325 - sin(angle) * armLength;
+  line(375, 350, rightArmEndX, rightArmEndY); // Right arm
+  // Left leg (upper part)
+  let leftKneeX = torsoEndX - cos(angle) * upperLegLength;
+  let leftKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, leftKneeX, leftKneeY); // Left upper leg
+  // Left leg (lower part)
+  line(leftKneeX, leftKneeY, leftKneeX - 20, leftKneeY + lowerLegLength); // Left lower leg
+  // Right leg (upper part)
+  let rightKneeX = torsoEndX + cos(angle) * upperLegLength;
+  let rightKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, rightKneeX, rightKneeY); // Right upper leg
+  // Right leg (lower part)
+  line(rightKneeX, rightKneeY, rightKneeX + 20, rightKneeY + lowerLegLength); // Right lower leg
+  // Head
+  circle(400, 300, headRadius * 2); // Head
+  // Pop the drawing style settings
+  pop();
+  
+  // Draw cartoon stars above the head separately to ensure no connection lines to the head
+  push(); // Isolate the fill to not affect other parts
+  fill(255, 255, 0); // Yellow color
+  ellipse(380, 260, 20, 20);
+  ellipse(420, 250, 30, 30);
+  ellipse(460, 270, 25, 25);
+  pop();
+}
+
+// Function to check if the mouse was clicked on a particular treasure chest
+function mouseClicked() {
+  resetAnimations();
+
+  if (dist(mouseX, mouseY, 150, 140) < 60) {
+    isLustAnimating = true;
+    isAnimating = true;
+    animationStartedAt = millis();
+  } 
+}
+
+function resetAnimations() {
+  isLustAnimating = false;
+  isAnimationFinished = false;
+}
+
+// Animation for 'Lust'
+function animateLust() {
+  let elapsedTime = millis() - animationStartedAt;
+  if (elapsedTime < 5000) { // 5-second animation (adjusted from 3 seconds)
+    // Draw balls for each wave
+    drawWaveAroundStickFigure(0); // Top
+    drawWaveAroundStickFigure(HALF_PI); // Right
+    drawWaveAroundStickFigure(PI); // Bottom
+    drawWaveAroundStickFigure(3 * HALF_PI); // Left
+    drawWaveAroundStickFigure(PI / 4); // Top-Right
+    drawWaveAroundStickFigure(3 * PI / 4); // Bottom-Right
+    drawWaveAroundStickFigure(5 * PI / 4); // Bottom-Left
+    drawWaveAroundStickFigure(7 * PI / 4); // Top-Left
+    theta += 0.1; // Modified speed
+  } else {
+    isLustAnimating = false;
+    isAnimationFinished = true;
+    animationFinishedAt = millis();
+  }
+}
+
+// Function to draw a single wave arranged around the stick figure
+function drawWaveAroundStickFigure(direction) {
+  let stickFigureCenterX = 400; // X-coordinate of stick figure's center
+  let stickFigureCenterY = 325; // Y-coordinate of stick figure's center
+  let radius = 200; // Radius of the circle around the stick figure
+
+  for (let i = 0; i < numBalls; i++) {
+    let phaseOffset = map(i, 0, numBalls - 1, 0, TWO_PI); // Offset phase based on ball index
+    let angle = TWO_PI / numBalls * i + direction; // Angle around the stick figure's circle
+    let x = stickFigureCenterX + radius * cos(angle);
+    let y = stickFigureCenterY + radius * sin(angle);
+    let waveDirection = atan2(stickFigureCenterY - y, stickFigureCenterX - x);
+    let wavePhase = waveDirection - HALF_PI;
+    let ballHeight = ballSize + amplitude * sin(TWO_PI / period * (i + 1) + theta + phaseOffset + wavePhase);
+    fill(ballColors[i]);
+    ellipse(x, y, ballSize, ballHeight); // Adjusted ballHeight to create stretching effect
+  }
+}
+  </script>
+</body>
+</html>
