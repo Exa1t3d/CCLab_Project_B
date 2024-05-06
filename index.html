@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <title>Curiosity</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
     <style>
         .box {
             text-align: center;
             margin-bottom: 20px; /* Add margin between boxes */
+            cursor: pointer; /* Add cursor pointer to indicate clickable */
         }
         .quote-box {
             background-color: #6648a5; /* Change background color for the quote box to a complementary color */
@@ -16,6 +18,90 @@
             border-radius: 10px; /* Add rounded corners */
             text-align: center; /* Center align the text */
         }
+        /* Animation for rotating box */
+        .rotate {
+            animation: rotateAnimation 1.5s ease-in-out forwards;
+        }
+        @keyframes rotateAnimation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Style for treasure chest */
+        #treasure-chest {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 50px; /* Set width of chest */
+            cursor: pointer; /* Add cursor pointer to indicate clickable */
+            animation: chestAnimation 2s infinite; /* Animation for chest movement */
+        }
+        /* Keyframes for chest animation */
+        @keyframes chestAnimation {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Futuristic font and rainbow gradient color for quote text */
+        .quote-box h3 {
+            font-family: 'Orbitron', sans-serif; /* Apply Orbitron font to the quote text */
+            background-image: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red); /* Rainbow gradient color */
+            -webkit-background-clip: text; /* Clip text to background gradient */
+            color: transparent; /* Set text color to transparent */
+            display: inline-block; /* Display as inline block to allow background gradient */
+            transition: background-position 0.5s ease; /* Smooth transition for gradient movement */
+            font-size: 24px; /* Increase font size */
+        }
+
+        .quote-box h3:hover {
+            background-size: 200% auto; /* Increase background size on hover */
+            background-position: right center; /* Move gradient to right on hover */
+        }
+
+        /* Bright orange color for the title */
+        .headline {
+            color: #ff7f00; /* Set color to bright orange */
+        }
+
+        /* Increase font size for text descriptions */
+        .box p {
+            font-size: 18px; /* Set font size to 18 pixels */
+        }
+
+        /* Styling for iframe */
+        iframe {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 400px; /* Set initial width */
+            height: 400px; /* Set initial height */
+        }
+
+        /* Custom heading styles */
+        .yellow {
+            color: #FFD700; /* Set color to gold */
+            font-size: 26px; /* Increase font size */
+        }
+
+        .green {
+            color: #00FF00; /* Set color to green */
+            font-size: 26px; /* Increase font size */
+        }
+
+        .box-title {
+            color: #00CED1; /* Set color to dark turquoise */
+            font-size: 26px; /* Increase font size */
+        }
     </style>
 </head>
 <body>
@@ -23,32 +109,93 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.1/p5.js"></script>
     </div>
     <div id="title-wrapper">
-        <h1 class="headline red">Curiosity</h1>
+        <h1 class="headline" onclick="playTitleAudio()">Curiosity</h1>
     </div>
     <div id="main-wrapper">
-        <div class="box" style="background-color: #180026;">
+        <div class="box" style="background-color: #180026;" onclick="rotateBox(this)">
             <h3 class="yellow">Created By</h3>
             <p>Britt Burney, 05/01/2024</p>
         </div>
-        <div class="box" style="background-color: #281147;">
+        <div class="box" style="background-color: #281147;" onclick="rotateBox(this)">
             <h3 class="green">Description</h3>
             <p>Curiosity is what defines humanity. Our insatiable desire to look beyond what lies before us and venture out into the unknown has fascinated great thinkers since time began, and although it is unmistakable that it has led to our species' dominance, many have called into question if it will bring about our demise.</p>
         </div>
-        <div class="box" style="background-color: #392162;">
+        <div class="box" style="background-color: #392162;" onclick="rotateBox(this)">
             <h3 class="box-title">Story of Curiosity</h3>
             <p>The portentous treasure chest presented before our protagonist beckons him to venture into the unknown across space and time, unfolding into realms never before seen by mankind.</p>
         </div>
-        <!-- Image -->
-        <img src="img1.jpg" alt="Description Image" class="box">
+        <!-- Image with click event -->
+        <img src="assets/img1.jpg" alt="Description Image" class="box" onclick="playAudio('assets/allah2.mp3')">
         <!-- Quote Box -->
         <div class="quote-box">
             <h3 class="box-title" style="text-align: center;">Quote about Curiosity</h3>
             <p style="text-align: center;">"Remember to look up at the stars and not down at your feet." - Stephen Hawking</p>
         </div>
+        <!-- Treasure chest image -->
+        <img id="treasure-chest" src="assets/chest.png" alt="Treasure Chest" onclick="openChest()">
     </div>
+    <!-- Audio player for the title -->
+    <audio id="title-audio-player" controls style="display: none;">
+        <source src="assets/CURIOSITY.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
     <div id="footer">
-        <p>A CCLab project made by Britt Burney, Spring '24  <a href="sketch_fullscreen.html">View Fullscreen Sketch</a></p>
+        <p>A CCLab project made by Britt Burney, Spring '24  <a href="canvas2/index.html">View Fullscreen Sketch</a></p>
     </div>
-    <script src="sketch.js"></script>
+    <!-- <script src="sketch.js"></script> -->
+    <iframe id="myFrame" src="canvas1/index.html" frameborder="0" width="400px" height="400px"></iframe>
+
+    <script>
+        // Function to play audio
+        function playAudio(audioSrc) {
+            var audio = new Audio(audioSrc);
+            audio.play();
+        }
+
+        // Function to play title audio
+        function playTitleAudio() {
+            var audio = new Audio("assets/CURIOSITY.mp3");
+            audio.play();
+        }
+
+        // Function to rotate box
+        function rotateBox(element) {
+            element.classList.add('rotate'); // Add rotate class to trigger animation
+        }
+
+        // Function to open the chest
+        function openChest() {
+            var audio = new Audio("assets/allah69.mp3"); // Play open sound
+            audio.play();
+            setTimeout(function() {
+                window.location.href = "canvas3/index.html"; // Redirect to new link after sound finishes
+            }, 1000); // Adjust the time according to the duration of the sound
+        }
+
+        // Variables for iframe movement
+        var frame = document.getElementById('myFrame');
+        var direction = 1;
+        var position = 0;
+
+        // Function to move iframe horizontally
+        function moveIframe() {
+            var speed = 2; // Set speed of movement
+            var maxWidth = window.innerWidth - frame.offsetWidth; // Calculate maximum width
+
+            // Update position based on direction
+            position += speed * direction;
+
+            // If the iframe reaches the edge, change direction
+            if (position >= maxWidth || position <= 0) {
+                direction *= -1;
+            }
+
+            // Update iframe position
+            frame.style.left = position + 'px';
+        }
+
+        // Call moveIframe() function repeatedly
+        setInterval(moveIframe, 30); // Adjust the interval as needed
+    </script>
 </body>
 </html>
