@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+
+<body>
+  <!-- the following div will contain the p5 canvas -->
+  <div id="canvasContainer"></div>
+
+  <script>
+let isClicked = false; // Variable to track if the user has clicked
+let stickPerson;
+let door;
+let doorX;
+let psychedelicPhase = false; // Variable to track if the psychedelic animation has started
+let psychedelicColors = []; // Array to store multiple colors for the psychedelic animation
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  stickPerson = new StickPerson();
+  // Initialize the Door object at the geometric center of the canvas
+  door = new Door(width - 200, 50);
+  // doorX = width - 50; // This line is no longer needed
+  // Generate an array of random colors for the psychedelic animation
+  for (let i = 0; i < 10; i++) {
+    psychedelicColors.push(color(random(255), random(255), random(255)));
+  }
+}
+
+function draw() {
+  background(0);
+  if (!isClicked) {
+    InitialView();
+  } else {
+    if (!psychedelicPhase) {
+      // Move stick person based on mouse movement
+      stickPerson.move(mouseX, mouseY);
+      // Check if stick person touches the door
+      if (dist(stickPerson.x, stickPerson.y, door.x + door.width / 2, door.y + door.height / 2) < 50) {
+        psychedelicPhase = true; // Start psychedelic animation
+      }
+      NewView();
+      // Display stick person
+      stickPerson.display();
+    } else {
+      // Psychedelic animation
+      for (let i = 0; i < 100; i++) {
+        fill(random(psychedelicColors));
+        noStroke();
+        ellipse(random(width), random(height), random(20, 200));
+      }
+    }
+  }
+}
+
+
+function mouseClicked() {
+  // Set isClicked to true when the user clicks anywhere on the screen
+  isClicked = true;
+}
+
+function InitialView() {
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  // Draw distressed stick person in initial view
+  drawDistressedStickPerson();
+  text("Help Me!", width / 2, height / 2 - 120);
+}
+
+function NewView() {
+  // Call the display method of the Door object
+  door.display();
+}
+
+// Define the Door class
+class Door {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 175;
+    this.height = 300;
+    this.frameWidth = 5; // Width of the door frame
+    this.doorColor = color(139, 69, 19); // Brown color for the door
+    this.knobSize = 10; // Size of the doorknob
+  }
+
+  // Display method to draw the door
+  display() {
+    // Draw door frame
+    fill(0); // Black color for the frame
+    rect(this.x - this.frameWidth, this.y, this.width + 2 * this.frameWidth, this.height);
+
+    // Draw door
+    fill(this.doorColor);
+    rect(this.x, this.y, this.width, this.height);
+
+    // Draw wooden panes
+    stroke(0); // Black color for outlines
+    for (let i = 0; i < this.width; i += 10) {
+      line(this.x + i, this.y, this.x + i, this.y + this.height);
+    }
+    for (let j = 0; j < this.height; j += 20) {
+      line(this.x, this.y + j, this.x + this.width, this.y + j);
+    }
+
+    // Draw doorknob
+    fill(0); // Black color for the knob
+    ellipse(this.x + this.width - this.knobSize, this.y + 150, this.knobSize * 2);
+  }
+}
+
+// Define the StickPerson class
+class StickPerson {
+  constructor() {
+    this.x = width / 2;
+    this.y = height / 2;
+    this.torsoLength = 100;
+    this.armLength = 50;
+    this.headRadius = 25;
+    this.legLength = 75;
+  }
+
+  move(targetX, targetY) {
+    // Move stick person towards the mouse position with smooth translation
+    this.x = lerp(this.x, targetX, 0.1);
+    this.y = lerp(this.y, targetY, 0.1);
+  }
+
+  display() {
+    // Draw stick person with stroke
+    stroke(255);
+
+    // Torso
+    line(this.x, this.y, this.x, this.y - this.torsoLength);
+
+    // Left arm
+    let leftArmEndX = this.x - cos(PI / 4) * this.armLength;
+    let leftArmEndY = this.y - this.torsoLength / 2 + sin(PI / 4) * this.armLength;
+    line(this.x, this.y - this.torsoLength / 2, leftArmEndX, leftArmEndY);
+
+    // Right arm
+    let rightArmEndX = this.x + cos(PI / 4) * this.armLength;
+    let rightArmEndY = this.y - this.torsoLength / 2 + sin(PI / 4) * this.armLength;
+    line(this.x, this.y - this.torsoLength / 2, rightArmEndX, rightArmEndY);
+
+    // Left leg
+    line(this.x, this.y, this.x - 0.5 * this.armLength, this.y + this.legLength);
+
+    // Right leg
+    line(this.x, this.y, this.x + 0.5 * this.armLength, this.y + this.legLength);
+
+    // Head
+    ellipse(this.x, this.y - this.torsoLength, this.headRadius * 2);
+  }
+}
+
+// Function to draw the distressed stick person in the initial view
+function drawDistressedStickPerson() {
+  let torsoLength = 100; // Length of the torso
+  let upperLegLength = 60; // Length of the upper part of the leg
+  let lowerLegLength = 40; // Length of the lower part of the leg
+  let armLength = 50; // Length of the arm
+  let headRadius = 25; // Radius of the head
+  let angle = radians(115); // Angle of torso off the ground
+
+  // Calculate torso endpoint
+  let torsoEndX = width / 2 + cos(angle) * torsoLength;
+  let torsoEndY = height / 2 + sin(angle) * torsoLength;
+
+  // Stick figure with stroke
+  stroke(255);
+  // Torso
+  line(width / 2, height / 2, torsoEndX, torsoEndY); // Body
+  // Left arm
+  let leftArmEndX = width / 2 - cos(angle) * armLength;
+  let leftArmEndY = height / 2 + sin(angle) * armLength;
+  line(width / 2 - 25, height / 2 + 25, leftArmEndX, leftArmEndY); // Left arm
+  // Right arm
+  let rightArmEndX = width / 2 + cos(angle) * armLength;
+  let rightArmEndY = height / 2 + sin(angle) * armLength;
+  line(width / 2 + 25, height / 2 + 25, rightArmEndX, rightArmEndY); // Right arm
+  // Left leg (upper part)
+  let leftKneeX = torsoEndX - cos(angle) * upperLegLength;
+  let leftKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, leftKneeX, leftKneeY); // Left upper leg
+  // Left leg (lower part)
+  line(leftKneeX, leftKneeY, leftKneeX - 20, leftKneeY + lowerLegLength); // Left lower leg
+  // Right leg (upper part)
+  let rightKneeX = torsoEndX + cos(angle) * upperLegLength;
+  let rightKneeY = torsoEndY + sin(angle) * upperLegLength;
+  line(torsoEndX, torsoEndY, rightKneeX, rightKneeY); // Right upper leg
+  // Right leg (lower part)
+  line(rightKneeX, rightKneeY, rightKneeX + 20, rightKneeY + lowerLegLength); // Right lower leg
+  // Head
+  ellipse(width / 2, height / 2, headRadius * 2); // Head
+}
+  </script>
+</body>
+</html>
