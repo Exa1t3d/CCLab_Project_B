@@ -1,12 +1,13 @@
 body {
     background: linear-gradient(to right, #6a0dad, #7913b1, #8a1bb5, #9b23b9, #ac2bbe, #bd33c2, #ce3bce, #df43df, #e34fef, #e65cff, #e969ff, #ec74ff, #ef80ff, #f28bff, #f496ff, #f7a1ff, #faadff, #fdb8ff, #ffc4ff, #ffd0ff, #ffdbff, #ffe7ff, #fff2ff, #ffffff);
+    background-size: 200% auto;
+    animation: gradientAnimation 10s linear infinite;
     color: white;
     font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
     font-size: 1em;
-    animation: animateGradient 30s linear infinite; /* Adjust the duration according to your preference */
 }
 
-@keyframes animateGradient {
+@keyframes gradientAnimation {
     0% {
         background-position: 0% 50%;
     }
@@ -15,8 +16,6 @@ body {
     }
 }
 
-
-/* The rest of your CSS remains unchanged */
 #title-wrapper {
     text-align: center;
 }
@@ -76,7 +75,6 @@ body {
 .rotate {
     animation: rotateAnimation 1.5s ease-in-out forwards;
 }
-
 @keyframes rotateAnimation {
     0% {
         transform: rotate(0deg);
